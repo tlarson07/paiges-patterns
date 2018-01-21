@@ -40,7 +40,6 @@ int main(int argc, char *argv[]){
   /* LOCAL VARIABLES */
   int valid; 	    // TODO: ask the user if they want to continue based on getting 5 in a row correct
   int count; 	    // number of problems
-  int start; 	    // start of table
   int step;	       // value between consecutive input values
   int operator;    // multiply (1) or divide (0)
   int slope;	    // slope (multiplied or divided based on operator)
@@ -140,12 +139,7 @@ void getSolution(int slope, int yInt, int operator, char *sign, int step, char *
      op = '*';
    else
      op = '/';
-   //  slope = step;
-   /*if(slope == 1){
-     snprintf(answer, sizeof(answer), "n %c %d\n", *sign, abs(yInt));
-   }
-   else*/
-     snprintf(answer, sizeof(answer), "n%c%d %c %d\n", op, slope, *sign, abs(yInt));
+   snprintf(answer, sizeof(answer), "n%c%d %c %d\n", op, slope, *sign, abs(yInt));
 }
 
 // prompt until solution correct or user types "new"
@@ -185,29 +179,23 @@ int parseAnswer(char *yourAnswer, int slope, int yInt, int operator, char sign)
   //init search parameters
   opFound = siFound = spFound = yFound = 0;
 
-  /*opFound = 0; 
-  siFound = 0; 
-  if(slope != 1) 
-    spFound = 0;
-  else{ 
-    spFound = 1;
-    mySlope = 1; 
-  }
-  if(yInt) 
-    yFound = 0;
-  else 
-    yFound = 1;*/
-
-  //printf("YOUR INPUT: %s", yourAnswer);
+  #ifdef INPUT
+   printf("YOUR INPUT: %s", yourAnswer);
+  #endif
   token = strtok(yourAnswer, " \n(){}[]");
   
   //check remaining tokens
   while(token){
-  //printf("TOKEN: '%s';\n", token);
+
+  #ifdef INPUT
+   printf("TOKEN: '%s';\n", token);
+  #endif
    for(i = 0; i<(int)strlen(token); i++){
    
       int a = *(token+i);
-      //printf("CHECKING THE FOLLOWING CHAR: %c\n", a);
+      #ifdef INPUT
+       printf("CHECKING THE FOLLOWING CHAR: %c\n", a);
+      #endif
       if (a == '+'){ 
         mySign = '+';
         siFound = 1; 
@@ -250,10 +238,14 @@ int parseAnswer(char *yourAnswer, int slope, int yInt, int operator, char sign)
   if(!spFound)
     mySlope = 1;
 
-  /*printf("\nSLOPE: %d;%d:\n", mySlope, slope);
-  printf("Y-INT: %d;%d;\n", myYint, yInt);
-  printf("OPERATOR: %d;%d;\n", myOperator, operator);
-  printf("SIGN: %d;%d;\n", mySign, sign);*/
+  #ifdef RESULTS
+   printf("\n(actual, expected)\n"); 
+   printf("SLOPE: %d;%d:\n", mySlope, slope);
+   printf("Y-INT: %d;%d;\n", myYint, yInt);
+   printf("OPERATOR: %d;%d;\n", myOperator, operator);
+   printf("SIGN: %d;%d;\n", mySign, sign);
+  #endif
+
   if(mySlope == slope 
 	&& myYint == yInt
 	&& myOperator == operator
